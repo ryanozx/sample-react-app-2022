@@ -1,14 +1,14 @@
 import Comment from '../types/Comment';
 
 import React from 'react';
-import { Card, CardContent, makeStyles, Typography } from '@material-ui/core';
+import { Card, CardContent, makeStyles, Typography } from '@mui/material';
 
 type Props = {
     comment: Comment;
     styled: boolean;
 };
 
-const useStyles = makeStyles({
+/*const useStyles = makeStyles({
     commentBody: {
         fontSize: 16,
         whiteSpace: 'pre-wrap',
@@ -20,19 +20,17 @@ const useStyles = makeStyles({
     metadata: {
         fontSize: 14,
     },
-});
+});*/
 
 const CommentItem: React.FC<Props> = ({ comment, styled }) => {
-    const classes = useStyles();
-
     if (styled) {
         return (
-            <Card className={classes.commentCard}>
+            <Card>
                 <CardContent>
-                    <Typography variant="body2" color="textPrimary" className={classes.commentBody} component="p">
+                    <Typography variant="body2" color="textPrimary" component="p">
                         {comment.body}
                     </Typography>
-                    <Typography color="textSecondary" className={classes.metadata} gutterBottom>
+                    <Typography color="textSecondary" gutterBottom>
                         {'Posted by ' + comment.author + ' on ' + comment.timestamp.toLocaleString()}
                     </Typography>
                 </CardContent>
@@ -42,7 +40,7 @@ const CommentItem: React.FC<Props> = ({ comment, styled }) => {
 
     // unstyled
     return (
-        <li className={classes.commentBody}>
+        <li>
             {comment.body}
             <br />
             <em>{'posted by ' + comment.author + ' on ' + comment.timestamp.toLocaleString()}</em>

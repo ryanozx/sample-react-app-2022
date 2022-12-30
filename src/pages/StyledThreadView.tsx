@@ -1,20 +1,18 @@
-import BasicCommentList from '../components/CommentList';
-import { Button, Card, CardContent, Fade, Typography } from '@material-ui/core';
+import BasicCommentList, {initComments} from '../components/CommentList';
+import { Button, Card, CardContent, CardActions, Typography, TextField} from '@mui/material';
 import { Link } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const StyledThreadView: React.FC = () => {
-    const [isShowTips, setIsShowTips] = useState(false);
-
-    const showTips = () => {
-        setIsShowTips(true);
-    };
+    const [comments, setComments] = useState(initComments);
+    const [commentText, setCommentText] = useState("");
+    const replyRef = React.createRef<HTMLInputElement>();
 
     return (
         <div style={{ width: '30vw', margin: 'auto' }}>
-            <Typography style={{ padding: '1em 0' }}>
+            {/* <Typography style={{ padding: '1em 0' }}>
                 <Typewriter
                     onInit={(typewriter) => {
                         typewriter
@@ -32,7 +30,7 @@ const StyledThreadView: React.FC = () => {
                     <a href="https://v4.mui.com/">{'Material UI'}</a>
                     {' docs to see what other components you can use!'}
                 </Typography>
-            </Fade>
+                </Fade> */}
             <Card>
                 <CardContent>
                     <Typography component="p">{'Viewing thread:'}</Typography>
@@ -50,8 +48,44 @@ const StyledThreadView: React.FC = () => {
                 </CardContent>
             </Card>
 
-            <BasicCommentList styled={true} />
+            <BasicCommentList styled={true} comments={comments} />
 
+            <Card variant="outlined">
+                <CardContent>
+                    <Typography component="p">{"Reply:"}</Typography>
+                    <TextField
+                        id="outlined-multiline-static"
+                        fullWidth={true}
+                        multiline
+                        value={commentText}
+                        onChange={e => setCommentText(e.target.value)}
+                        placeholder="Type comment here"
+                        variant="outlined"
+                        margin="normal"
+                        inputRef={replyRef}
+                    />
+                </CardContent>
+                <CardActions style={{"justifyContent": "center", "padding": "0px 16px 16px 16px"}}>
+                    <Button 
+                        variant="contained" 
+                        color="primary"
+                        onClick={() => {
+                            if (commentText !== "")
+                            {
+                                setCommentText("");
+                                setComments([...comments,
+                                {body: commentText,
+                                author: "anonymous",
+                                timestamp: new Date()}])
+                            }
+                            replyRef.current!.focus();
+                        }}
+                    >
+                        {"Submit"}
+                    </Button>
+                </CardActions>
+            </Card>
+            <br />
             <Link to="/">
                 <Button variant="contained" color="secondary">
                     {'Back to threads'}
